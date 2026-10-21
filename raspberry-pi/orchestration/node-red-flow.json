@@ -1,0 +1,627 @@
+[
+    {
+        "id": "ec68f3d61e3e2fed",
+        "type": "tab",
+        "label": "System _v2",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "19d04b911fd0e8b9",
+        "type": "exec",
+        "z": "ec68f3d61e3e2fed",
+        "command": "python3 /home/pi/raspberry-pi/sensors/pir_gate_sensor.py",
+        "addpay": false,
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "oldrc": false,
+        "name": "pir code",
+        "x": 540,
+        "y": 360,
+        "wires": [
+            [
+                "f3cb583ed58b3832"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "f3cb583ed58b3832",
+        "type": "exec",
+        "z": "ec68f3d61e3e2fed",
+        "command": "python3 /home/pi/raspberry-pi/actuators/gate_stepper_motor.py",
+        "addpay": "",
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "oldrc": false,
+        "name": "stepper code",
+        "x": 750,
+        "y": 360,
+        "wires": [
+            [
+                "f64b059640a8b616"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "b351735ef69d4a6c",
+        "type": "exec",
+        "z": "ec68f3d61e3e2fed",
+        "command": "python3 /home/pi/raspberry-pi/vision/FaceMaskDetection/verification_server.py",
+        "addpay": "",
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "winHide": false,
+        "oldrc": false,
+        "name": "video",
+        "x": 990,
+        "y": 220,
+        "wires": [
+            [],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "0a879f873ec8450a",
+        "type": "inject",
+        "z": "ec68f3d61e3e2fed",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "0.1",
+        "topic": "",
+        "payload": "start",
+        "payloadType": "str",
+        "x": 130,
+        "y": 200,
+        "wires": [
+            [
+                "21fdd285470a7db1",
+                "f64b059640a8b616"
+            ]
+        ]
+    },
+    {
+        "id": "9ca01fb560754ee9",
+        "type": "websocket out",
+        "z": "ec68f3d61e3e2fed",
+        "name": "",
+        "server": "",
+        "client": "845868db.e47b18",
+        "x": 1250,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "f645dbbcc03dbfe0",
+        "type": "json",
+        "z": "ec68f3d61e3e2fed",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 1030,
+        "y": 420,
+        "wires": [
+            [
+                "9ca01fb560754ee9"
+            ]
+        ]
+    },
+    {
+        "id": "e46e47d76620ed6a",
+        "type": "link out",
+        "z": "ec68f3d61e3e2fed",
+        "name": "send on start",
+        "links": [
+            "ebcb635afb1a3e8f"
+        ],
+        "x": 1145,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "ebcb635afb1a3e8f",
+        "type": "link in",
+        "z": "ec68f3d61e3e2fed",
+        "name": "recive on start",
+        "links": [
+            "e46e47d76620ed6a",
+            "47ecf64b.cd7818",
+            "1d3ec475.8834ac",
+            "9d7de16e.46fa6"
+        ],
+        "x": 915,
+        "y": 420,
+        "wires": [
+            [
+                "f645dbbcc03dbfe0"
+            ]
+        ]
+    },
+    {
+        "id": "12c8606da7c76ba9",
+        "type": "function",
+        "z": "ec68f3d61e3e2fed",
+        "name": "",
+        "func": "obj = {\"start\": msg.payload};\n\n\nmsg.payload = obj;\n\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1000,
+        "y": 160,
+        "wires": [
+            [
+                "e46e47d76620ed6a"
+            ]
+        ]
+    },
+    {
+        "id": "918b16619ae53675",
+        "type": "http in",
+        "z": "ec68f3d61e3e2fed",
+        "name": "",
+        "url": "/test",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 320,
+        "y": 520,
+        "wires": [
+            [
+                "1b9e89a1d97bf73d"
+            ]
+        ]
+    },
+    {
+        "id": "1b9e89a1d97bf73d",
+        "type": "template",
+        "z": "ec68f3d61e3e2fed",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Home</title>\n\n    <link href=\"https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css\" rel=\"stylesheet\" integrity=\"sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3\" crossorigin=\"anonymous\">\n    <script src=\"https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js\" integrity=\"sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js\" integrity=\"sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13\" crossorigin=\"anonymous\"></script>\n    <script src=\"https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js\" integrity=\"sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p\" crossorigin=\"anonymous\"></script>\n    <script>\n    (function(){function t(t,i){for(var e in i)m.call(i,e)&&(t[e]=i[e]);function s(){this.constructor=t}return s.prototype=i.prototype,t.prototype=new s,t.__super__=i.prototype,t}var i,e,s,n,o,p,a,h,r,l,g,c,u,d=[].slice,m={}.hasOwnProperty,x=[].indexOf||function(t){for(var i=0,e=this.length;i<e;i++)if(i in this&&this[i]===t)return i;return-1};function f(t,i){null==t&&(t=!0),this.clear=null==i||i,t&&AnimationUpdater.add(this)}function v(){return v.__super__.constructor.apply(this,arguments)}function y(t,i){this.el=t,this.fractionDigits=i}function V(t,i){if(this.elem=t,this.text=null!=i&&i,V.__super__.constructor.call(this),void 0===this.elem)throw new Error(\"The element isn't defined.\");this.value=1*this.elem.innerHTML,this.text&&(this.value=0)}function w(t){if(this.gauge=t,void 0===this.gauge)throw new Error(\"The element isn't defined.\");this.ctx=this.gauge.ctx,this.canvas=this.gauge.canvas,w.__super__.constructor.call(this,!1,!1),this.setOptions()}function S(t){this.elem=t}function M(t){var i,e;this.canvas=t,M.__super__.constructor.call(this),this.percentColors=null,\"undefined\"!=typeof G_vmlCanvasManager&&(this.canvas=window.G_vmlCanvasManager.initElement(this.canvas)),this.ctx=this.canvas.getContext(\"2d\"),i=this.canvas.clientHeight,e=this.canvas.clientWidth,this.canvas.height=i,this.canvas.width=e,this.gp=[new p(this)],this.setOptions()}function C(t){this.canvas=t,C.__super__.constructor.call(this),\"undefined\"!=typeof G_vmlCanvasManager&&(this.canvas=window.G_vmlCanvasManager.initElement(this.canvas)),this.ctx=this.canvas.getContext(\"2d\"),this.setOptions(),this.render()}function _(){return _.__super__.constructor.apply(this,arguments)}!function(){var s,n,t,o,i,e,a;for(t=0,i=(a=[\"ms\",\"moz\",\"webkit\",\"o\"]).length;t<i&&(e=a[t],!window.requestAnimationFrame);t++)window.requestAnimationFrame=window[e+\"RequestAnimationFrame\"],window.cancelAnimationFrame=window[e+\"CancelAnimationFrame\"]||window[e+\"CancelRequestAnimationFrame\"];s=null,o=0,n={},requestAnimationFrame?window.cancelAnimationFrame||(s=window.requestAnimationFrame,window.requestAnimationFrame=function(t,i){var e;return e=++o,s(function(){if(!n[e])return t()},i),e},window.cancelAnimationFrame=function(t){return n[t]=!0}):(window.requestAnimationFrame=function(t,i){var e,s,n,o;return e=(new Date).getTime(),o=Math.max(0,16-(e-n)),s=window.setTimeout(function(){return t(e+o)},o),n=e+o,s},window.cancelAnimationFrame=function(t){return clearTimeout(t)})}(),u=function(t){var i,e;for(t-=3600*(i=Math.floor(t/3600))+60*(e=Math.floor((t-3600*i)/60)),t+=\"\",e+=\"\";e.length<2;)e=\"0\"+e;for(;t.length<2;)t=\"0\"+t;return(i=i?i+\":\":\"\")+e+\":\"+t},g=function(){var t,i,e;return e=(i=1<=arguments.length?d.call(arguments,0):[])[0],t=i[1],r(e.toFixed(t))},c=function(t,i){var e,s,n;for(e in s={},t)m.call(t,e)&&(n=t[e],s[e]=n);for(e in i)m.call(i,e)&&(n=i[e],s[e]=n);return s},r=function(t){var i,e,s,n;for(s=(e=(t+=\"\").split(\".\"))[0],n=\"\",1<e.length&&(n=\".\"+e[1]),i=/(\\d+)(\\d{3})/;i.test(s);)s=s.replace(i,\"$1,$2\");return s+n},l=function(t){return\"#\"===t.charAt(0)?t.substring(1,7):t},f.prototype.animationSpeed=32,f.prototype.update=function(t){var i;return null==t&&(t=!1),!(!t&&this.displayedValue===this.value||(this.ctx&&this.clear&&this.ctx.clearRect(0,0,this.canvas.width,this.canvas.height),i=this.value-this.displayedValue,Math.abs(i/this.animationSpeed)<=.001?this.displayedValue=this.value:this.displayedValue=this.displayedValue+i/this.animationSpeed,this.render(),0))},t(v,h=f),v.prototype.displayScale=1,v.prototype.forceUpdate=!0,v.prototype.setTextField=function(t,i){return this.textField=t instanceof a?t:new a(t,i)},v.prototype.setMinValue=function(t,i){var e,s,n,o,a;if(this.minValue=t,null==i&&(i=!0),i){for(this.displayedValue=this.minValue,a=[],s=0,n=(o=this.gp||[]).length;s<n;s++)e=o[s],a.push(e.displayedValue=this.minValue);return a}},v.prototype.setOptions=function(t){return null==t&&(t=null),this.options=c(this.options,t),this.textField&&(this.textField.el.style.fontSize=t.fontSize+\"px\"),.5<this.options.angle&&(this.options.angle=.5),this.configDisplayScale(),this},v.prototype.configDisplayScale=function(){var t,i,e,s,n;return s=this.displayScale,!1===this.options.highDpiSupport?delete this.displayScale:(i=window.devicePixelRatio||1,t=this.ctx.webkitBackingStorePixelRatio||this.ctx.mozBackingStorePixelRatio||this.ctx.msBackingStorePixelRatio||this.ctx.oBackingStorePixelRatio||this.ctx.backingStorePixelRatio||1,this.displayScale=i/t),this.displayScale!==s&&(n=this.canvas.G__width||this.canvas.width,e=this.canvas.G__height||this.canvas.height,this.canvas.width=n*this.displayScale,this.canvas.height=e*this.displayScale,this.canvas.style.width=n+\"px\",this.canvas.style.height=e+\"px\",this.canvas.G__width=n,this.canvas.G__height=e),this},v.prototype.parseValue=function(t){return t=parseFloat(t)||Number(t),isFinite(t)?t:0},s=v,y.prototype.render=function(t){return this.el.innerHTML=g(t.displayedValue,this.fractionDigits)},a=y,t(V,h),V.prototype.displayedValue=0,V.prototype.value=0,V.prototype.setVal=function(t){return this.value=1*t},V.prototype.render=function(){var t;return t=this.text?u(this.displayedValue.toFixed(0)):r(g(this.displayedValue)),this.elem.innerHTML=t},i=V,t(w,h),w.prototype.displayedValue=0,w.prototype.value=0,w.prototype.options={strokeWidth:.035,length:.1,color:\"#000000\",iconPath:null,iconScale:1,iconAngle:0},w.prototype.img=null,w.prototype.setOptions=function(t){if(null==t&&(t=null),this.options=c(this.options,t),this.length=2*this.gauge.radius*this.gauge.options.radiusScale*this.options.length,this.strokeWidth=this.canvas.height*this.options.strokeWidth,this.maxValue=this.gauge.maxValue,this.minValue=this.gauge.minValue,this.animationSpeed=this.gauge.animationSpeed,this.options.angle=this.gauge.options.angle,this.options.iconPath)return this.img=new Image,this.img.src=this.options.iconPath},w.prototype.render=function(){var t,i,e,s,n,o,a,h,r;if(t=this.gauge.getAngle.call(this,this.displayedValue),h=Math.round(this.length*Math.cos(t)),r=Math.round(this.length*Math.sin(t)),o=Math.round(this.strokeWidth*Math.cos(t-Math.PI/2)),a=Math.round(this.strokeWidth*Math.sin(t-Math.PI/2)),i=Math.round(this.strokeWidth*Math.cos(t+Math.PI/2)),e=Math.round(this.strokeWidth*Math.sin(t+Math.PI/2)),this.ctx.beginPath(),this.ctx.fillStyle=this.options.color,this.ctx.arc(0,0,this.strokeWidth,0,2*Math.PI,!1),this.ctx.fill(),this.ctx.beginPath(),this.ctx.moveTo(o,a),this.ctx.lineTo(h,r),this.ctx.lineTo(i,e),this.ctx.fill(),this.img)return s=Math.round(this.img.width*this.options.iconScale),n=Math.round(this.img.height*this.options.iconScale),this.ctx.save(),this.ctx.translate(h,r),this.ctx.rotate(t+Math.PI/180*(90+this.options.iconAngle)),this.ctx.drawImage(this.img,-s/2,-n/2,s,n),this.ctx.restore()},p=w,S.prototype.updateValues=function(t){return this.value=t[0],this.maxValue=t[1],this.avgValue=t[2],this.render()},S.prototype.render=function(){var t,i;return this.textField&&this.textField.text(g(this.value)),0===this.maxValue&&(this.maxValue=2*this.avgValue),i=this.value/this.maxValue*100,t=this.avgValue/this.maxValue*100,$(\".bar-value\",this.elem).css({width:i+\"%\"}),$(\".typical-value\",this.elem).css({width:t+\"%\"})},t(M,s),M.prototype.elem=null,M.prototype.value=[20],M.prototype.maxValue=80,M.prototype.minValue=0,M.prototype.displayedAngle=0,M.prototype.displayedValue=0,M.prototype.lineWidth=40,M.prototype.paddingTop=.1,M.prototype.paddingBottom=.1,M.prototype.percentColors=null,M.prototype.options={colorStart:\"#6fadcf\",colorStop:void 0,gradientType:0,strokeColor:\"#e0e0e0\",pointer:{length:.8,strokeWidth:.035,iconScale:1},angle:.15,lineWidth:.44,radiusScale:1,fontSize:40,limitMax:!1,limitMin:!1},M.prototype.setOptions=function(t){var i,e,s,n,o;for(null==t&&(t=null),M.__super__.setOptions.call(this,t),this.configPercentColors(),this.extraPadding=0,this.options.angle<0&&(n=Math.PI*(1+this.options.angle),this.extraPadding=Math.sin(n)),this.availableHeight=this.canvas.height*(1-this.paddingTop-this.paddingBottom),this.lineWidth=this.availableHeight*this.options.lineWidth,this.radius=(this.availableHeight-this.lineWidth/2)/(1+this.extraPadding),this.ctx.clearRect(0,0,this.canvas.width,this.canvas.height),e=0,s=(o=this.gp).length;e<s;e++)(i=o[e]).setOptions(this.options.pointer),i.render();return this.render(),this},M.prototype.configPercentColors=function(){var t,i,e,s,n,o,a;if(this.percentColors=null,void 0!==this.options.percentColors){for(this.percentColors=new Array,o=[],e=s=0,n=this.options.percentColors.length-1;0<=n?s<=n:n<=s;e=0<=n?++s:--s)a=parseInt(l(this.options.percentColors[e][1]).substring(0,2),16),i=parseInt(l(this.options.percentColors[e][1]).substring(2,4),16),t=parseInt(l(this.options.percentColors[e][1]).substring(4,6),16),o.push(this.percentColors[e]={pct:this.options.percentColors[e][0],color:{r:a,g:i,b:t}});return o}},M.prototype.set=function(t){var i,e,s,n,o,a,h,r,l;for(t instanceof Array||(t=[t]),e=s=0,h=t.length-1;0<=h?s<=h:h<=s;e=0<=h?++s:--s)t[e]=this.parseValue(t[e]);if(t.length>this.gp.length)for(e=n=0,r=t.length-this.gp.length;0<=r?n<r:r<n;e=0<=r?++n:--n)(i=new p(this)).setOptions(this.options.pointer),this.gp.push(i);else t.length<this.gp.length&&(this.gp=this.gp.slice(this.gp.length-t.length));for(a=e=0,o=t.length;a<o;a++)(l=t[a])>this.maxValue?this.options.limitMax?l=this.maxValue:this.maxValue=l+1:l<this.minValue&&(this.options.limitMin?l=this.minValue:this.minValue=l-1),this.gp[e].value=l,this.gp[e++].setOptions({minValue:this.minValue,maxValue:this.maxValue,angle:this.options.angle});return this.value=Math.max(Math.min(t[t.length-1],this.maxValue),this.minValue),AnimationUpdater.add(this),AnimationUpdater.run(this.forceUpdate),this.forceUpdate=!1},M.prototype.getAngle=function(t){return(1+this.options.angle)*Math.PI+(t-this.minValue)/(this.maxValue-this.minValue)*(1-2*this.options.angle)*Math.PI},M.prototype.getColorForPercentage=function(t,i){var e,s,n,o,a,h,r;if(0===t)e=this.percentColors[0].color;else for(e=this.percentColors[this.percentColors.length-1].color,n=o=0,h=this.percentColors.length-1;0<=h?o<=h:h<=o;n=0<=h?++o:--o)if(t<=this.percentColors[n].pct){e=!0===i?(r=this.percentColors[n-1]||this.percentColors[0],s=this.percentColors[n],a=(t-r.pct)/(s.pct-r.pct),{r:Math.floor(r.color.r*(1-a)+s.color.r*a),g:Math.floor(r.color.g*(1-a)+s.color.g*a),b:Math.floor(r.color.b*(1-a)+s.color.b*a)}):this.percentColors[n].color;break}return\"rgb(\"+[e.r,e.g,e.b].join(\",\")+\")\"},M.prototype.getColorForValue=function(t,i){var e;return e=(t-this.minValue)/(this.maxValue-this.minValue),this.getColorForPercentage(e,i)},M.prototype.renderStaticLabels=function(t,i,e,s){var n,o,a,h,r,l,p,c,u,d;for(this.ctx.save(),this.ctx.translate(i,e),l=/\\d+\\.?\\d?/,r=(n=t.font||\"10px Times\").match(l)[0],c=n.slice(r.length),o=parseFloat(r)*this.displayScale,this.ctx.font=o+c,this.ctx.fillStyle=t.color||\"#000000\",this.ctx.textBaseline=\"bottom\",this.ctx.textAlign=\"center\",a=0,h=(p=t.labels).length;a<h;a++)void 0!==(d=p[a]).label?(!this.options.limitMin||d>=this.minValue)&&(!this.options.limitMax||d<=this.maxValue)&&(r=(n=d.font||t.font).match(l)[0],c=n.slice(r.length),o=parseFloat(r)*this.displayScale,this.ctx.font=o+c,u=this.getAngle(d.label)-3*Math.PI/2,this.ctx.rotate(u),this.ctx.fillText(g(d.label,t.fractionDigits),0,-s-this.lineWidth/2),this.ctx.rotate(-u)):(!this.options.limitMin||d>=this.minValue)&&(!this.options.limitMax||d<=this.maxValue)&&(u=this.getAngle(d)-3*Math.PI/2,this.ctx.rotate(u),this.ctx.fillText(g(d,t.fractionDigits),0,-s-this.lineWidth/2),this.ctx.rotate(-u));return this.ctx.restore()},M.prototype.renderTicks=function(t,i,e,s){var n,o,a,h,r,l,p,c,u,d,g,m,x,f,v,y,V,w,S,M;if(t!=={}){for(l=t.divisions||0,w=t.subDivisions||0,a=t.divColor||\"#fff\",f=t.subColor||\"#fff\",h=t.divLength||.7,y=t.subLength||.2,u=parseFloat(this.maxValue)-parseFloat(this.minValue),d=parseFloat(u)/parseFloat(t.divisions),v=parseFloat(d)/parseFloat(t.subDivisions),n=parseFloat(this.minValue),o=0+v,r=(c=u/400)*(t.divWidth||1),V=c*(t.subWidth||1),m=[],S=p=0,g=l+1;p<g;S=p+=1)this.ctx.lineWidth=this.lineWidth*h,x=this.lineWidth/2*(1-h),M=this.radius*this.options.radiusScale+x,this.ctx.strokeStyle=a,this.ctx.beginPath(),this.ctx.arc(0,0,M,this.getAngle(n-r),this.getAngle(n+r),!1),this.ctx.stroke(),o=n+v,n+=d,S!==t.divisions&&0<w?m.push(function(){var t,i,e;for(e=[],t=0,i=w-1;t<i;t+=1)this.ctx.lineWidth=this.lineWidth*y,x=this.lineWidth/2*(1-y),M=this.radius*this.options.radiusScale+x,this.ctx.strokeStyle=f,this.ctx.beginPath(),this.ctx.arc(0,0,M,this.getAngle(o-V),this.getAngle(o+V),!1),this.ctx.stroke(),e.push(o+=v);return e}.call(this)):m.push(void 0);return m}},M.prototype.render=function(){var t,i,e,s,n,o,a,h,r,l,p,c,u,d,g,m;if(g=this.canvas.width/2,e=this.canvas.height*this.paddingTop+this.availableHeight-(this.radius+this.lineWidth/2)*this.extraPadding,t=this.getAngle(this.displayedValue),this.textField&&this.textField.render(this),this.ctx.lineCap=\"butt\",l=this.radius*this.options.radiusScale,this.options.staticLabels&&this.renderStaticLabels(this.options.staticLabels,g,e,l),this.options.staticZones)for(this.ctx.save(),this.ctx.translate(g,e),this.ctx.lineWidth=this.lineWidth,s=0,o=(p=this.options.staticZones).length;s<o;s++)r=(m=p[s]).min,this.options.limitMin&&r<this.minValue&&(r=this.minValue),h=m.max,this.options.limitMax&&h>this.maxValue&&(h=this.maxValue),d=this.radius*this.options.radiusScale,m.height&&(this.ctx.lineWidth=this.lineWidth*m.height,u=this.lineWidth/2*(m.offset||1-m.height),d=this.radius*this.options.radiusScale+u),this.ctx.strokeStyle=m.strokeStyle,this.ctx.beginPath(),this.ctx.arc(0,0,d,this.getAngle(r),this.getAngle(h),!1),this.ctx.stroke();else void 0!==this.options.customFillStyle?i=this.options.customFillStyle(this):null!==this.percentColors?i=this.getColorForValue(this.displayedValue,this.options.generateGradient):void 0!==this.options.colorStop?((i=0===this.options.gradientType?this.ctx.createRadialGradient(g,e,9,g,e,70):this.ctx.createLinearGradient(0,0,g,0)).addColorStop(0,this.options.colorStart),i.addColorStop(1,this.options.colorStop)):i=this.options.colorStart,this.ctx.strokeStyle=i,this.ctx.beginPath(),this.ctx.arc(g,e,l,(1+this.options.angle)*Math.PI,t,!1),this.ctx.lineWidth=this.lineWidth,this.ctx.stroke(),this.ctx.strokeStyle=this.options.strokeColor,this.ctx.beginPath(),this.ctx.arc(g,e,l,t,(2-this.options.angle)*Math.PI,!1),this.ctx.stroke(),this.ctx.save(),this.ctx.translate(g,e);for(this.options.renderTicks&&this.renderTicks(this.options.renderTicks,g,e,l),this.ctx.restore(),this.ctx.translate(g,e),n=0,a=(c=this.gp).length;n<a;n++)c[n].update(!0);return this.ctx.translate(-g,-e)},o=M,t(C,s),C.prototype.lineWidth=15,C.prototype.displayedValue=0,C.prototype.value=33,C.prototype.maxValue=80,C.prototype.minValue=0,C.prototype.options={lineWidth:.1,colorStart:\"#6f6ea0\",colorStop:\"#c0c0db\",strokeColor:\"#eeeeee\",shadowColor:\"#d5d5d5\",angle:.35,radiusScale:1},C.prototype.getAngle=function(t){return(1-this.options.angle)*Math.PI+(t-this.minValue)/(this.maxValue-this.minValue)*(2+this.options.angle-(1-this.options.angle))*Math.PI},C.prototype.setOptions=function(t){return null==t&&(t=null),C.__super__.setOptions.call(this,t),this.lineWidth=this.canvas.height*this.options.lineWidth,this.radius=this.options.radiusScale*(this.canvas.height/2-this.lineWidth/2),this},C.prototype.set=function(t){return this.value=this.parseValue(t),this.value>this.maxValue?this.options.limitMax?this.value=this.maxValue:this.maxValue=this.value:this.value<this.minValue&&(this.options.limitMin?this.value=this.minValue:this.minValue=this.value),AnimationUpdater.add(this),AnimationUpdater.run(this.forceUpdate),this.forceUpdate=!1},C.prototype.render=function(){var t,i,e,s;return t=this.getAngle(this.displayedValue),s=this.canvas.width/2,e=this.canvas.height/2,this.textField&&this.textField.render(this),(i=this.ctx.createRadialGradient(s,e,39,s,e,70)).addColorStop(0,this.options.colorStart),i.addColorStop(1,this.options.colorStop),this.radius,this.lineWidth,this.radius,this.lineWidth,this.ctx.strokeStyle=this.options.strokeColor,this.ctx.beginPath(),this.ctx.arc(s,e,this.radius,(1-this.options.angle)*Math.PI,(2+this.options.angle)*Math.PI,!1),this.ctx.lineWidth=this.lineWidth,this.ctx.lineCap=\"round\",this.ctx.stroke(),this.ctx.strokeStyle=i,this.ctx.beginPath(),this.ctx.arc(s,e,this.radius,(1-this.options.angle)*Math.PI,t,!1),this.ctx.stroke()},t(_,e=C),_.prototype.strokeGradient=function(t,i,e,s){var n;return(n=this.ctx.createRadialGradient(t,i,e,t,i,s)).addColorStop(0,this.options.shadowColor),n.addColorStop(.12,this.options._orgStrokeColor),n.addColorStop(.88,this.options._orgStrokeColor),n.addColorStop(1,this.options.shadowColor),n},_.prototype.setOptions=function(t){var i,e,s,n;return null==t&&(t=null),_.__super__.setOptions.call(this,t),n=this.canvas.width/2,i=this.canvas.height/2,e=this.radius-this.lineWidth/2,s=this.radius+this.lineWidth/2,this.options._orgStrokeColor=this.options.strokeColor,this.options.strokeColor=this.strokeGradient(n,i,e,s),this},n=_,window.AnimationUpdater={elements:[],animId:null,addAll:function(t){var i,e,s,n;for(n=[],e=0,s=t.length;e<s;e++)i=t[e],n.push(AnimationUpdater.elements.push(i));return n},add:function(t){if(x.call(AnimationUpdater.elements,t)<0)return AnimationUpdater.elements.push(t)},run:function(t){var i,e,s,n,o,a,h;if(null==t&&(t=!1),isFinite(parseFloat(t))||!0===t){for(i=!0,h=[],s=e=0,o=(a=AnimationUpdater.elements).length;e<o;s=++e)a[s].update(!0===t)?i=!1:h.push(s);for(n=h.length-1;0<=n;n+=-1)s=h[n],AnimationUpdater.elements.splice(s,1);return AnimationUpdater.animId=i?null:requestAnimationFrame(AnimationUpdater.run)}if(!1===t)return!0===AnimationUpdater.animId&&cancelAnimationFrame(AnimationUpdater.animId),AnimationUpdater.animId=requestAnimationFrame(AnimationUpdater.run)}},\"function\"==typeof window.define&&null!=window.define.amd?define(function(){return{Gauge:o,Donut:n,BaseDonut:e,TextRenderer:a}}):\"undefined\"!=typeof module&&null!=module.exports?module.exports={Gauge:o,Donut:n,BaseDonut:e,TextRenderer:a}:(window.Gauge=o,window.Donut=n,window.BaseDonut=e,window.TextRenderer=a)}).call(this);\n</script>\n   \n    <style>\n        body, html {\n            height: 100%;\n            margin: 0;\n            overflow-y:hidden;\n            height: 100%;\n\t\t}\n        .mid{\n            height: 70%; \n            width:60%; \n            /*border: 2px solid #707070;\n            border-radius: 8px;\n            padding: 0px;*/\n            position: fixed;\n            top: 50%;\n            transform: translate(10%, -50%);\n        }\n        #slide{\n            height: 75%; \n            width:78%; \n            \n            position: absolute;\n            top: 60%;\n            left: 50%;\n            margin-right: -50%;\n            transform: translate(-50%, -50%);\n        }\n        .txt_mid{\n            position: fixed;\n            top: 40%;\n            left: 70%;\n            transform: translate(-50%, -50%);\n  \n        }\n        .top{\n            position: fixed;\n            top: 0;\n            width: 100%;\n            height: 20%;\n        }\n        .bot {\n            position: fixed;\n            bottom: 0;\n            right: 10%;\n            height: 50%;\n        }\n       \n        #icon{\n            text-align: center;\n            background: rgb(190, 199, 201);\n            color: white;\n            height: 140px;\n            width: 140px;\n            line-height: 140px;\n        }\n        \n        #container {\n            position: absolute;\n            width: 100%;\n            height: 100%;\n            margin: auto;\n            top: 0; bottom: 0; left: 0; right: 0;\n        }\n    </style>\n</head>\n<body>\n    \n    <div class=\"top d-flex justify-content-end\">\n        <div class=\"d-inline-block w-25 d-flex justify-content-end\" style=\"margin: 5px;\">\n            <div id=\"icon\" class=\"rounded-circle\" style=\"position: relative; border:#333; border-style: solid; background-color:#07F230;  margin-left:60px\">\n                <div id=\"preview-textfield\"  style=\"color:black; font-size: 20px; font-family: sans, 'Impact';  position: absolute;  left: 0; right: 0; margin-left: auto; margin-right: auto;\">\n                    0\n                </div>\n                    <canvas id=\"foo\" width=\"134px\" height=\"134px\" ></canvas>                                 \n            </div>   \n        </div>\n    </div>\n\n\n\n    <div >\n        <iframe id=\"stream\" class=\"mid\" src=\"http://127.0.0.1:4440/\" title=\"stream\" height=\"100%\" width=\"100%\" style=\" visibility: hidden;\"></iframe>\n       \n    </div>\n\n\n\n    <div class=\"txt_mid\">\n        <p id=\"txt_fr\"class=\"d-flex align-items-center justify-content-center text-center\" style=\"font-size:40px; font-weight: bold;\">\n                \n        </p> \n        <hr> \n        <p id=\"txt_ar\"class=\"d-flex align-items-center justify-content-center text-center\" style=\"font-size:40px; font-weight: bold;\">  \n        </p>\n    </div>\n\n\n   <img id =\"ulls\" src=\"ulls.png\" class=\"bot\" style=\"visibility: hidden;\"/>\n    <img id =\"detection\" src=\"mask.png\"  style=\"visibility: hidden; height:30%; width:auto; position: fixed; bottom: 10%; right: 25%;\"/>\n        <img id =\"welcome\" src=\"welcome.png\"  style=\"visibility: hidden; \n        height: 58%; \n            width:56%;  \n         \n            position: fixed;\n            top: 50%;\n            transform: translate(1%, -50%);\"/>\n\n<div id=\"slide\" top: 60%; left: 50%;>\n    <div id=\"carouselExampleIndicators\" class=\"carousel slide\" data-bs-ride=\"carousel\">\n  <div class=\"carousel-indicators\">\n    <button type=\"button\" data-bs-target=\"#carouselExampleIndicators\" data-bs-slide-to=\"0\" class=\"active\" aria-current=\"true\" aria-label=\"Slide 1\"></button>\n    <button type=\"button\" data-bs-target=\"#carouselExampleIndicators\" data-bs-slide-to=\"1\" aria-label=\"Slide 2\"></button>\n    <button type=\"button\" data-bs-target=\"#carouselExampleIndicators\" data-bs-slide-to=\"2\" aria-label=\"Slide 3\"></button>\n  </div>\n  <div class=\"carousel-inner\">\n    <div class=\"carousel-item active\">\n      <img src=\"pic1.jpg\" class=\"d-block w-100\">\n    </div>\n    <div class=\"carousel-item\">\n      <img src=\"pic2.jpg\" class=\"d-block w-100\">\n    </div>\n    <div class=\"carousel-item\">\n      <img src=\"pic3.jpg\" class=\"d-block w-100\">\n    </div>\n  </div>\n  <button class=\"carousel-control-prev\" type=\"button\" data-bs-target=\"#carouselExampleIndicators\" data-bs-slide=\"prev\">\n    <span class=\"carousel-control-prev-icon\" aria-hidden=\"true\"></span>\n    <span class=\"visually-hidden\">Previous</span>\n  </button>\n  <button class=\"carousel-control-next\" type=\"button\" data-bs-target=\"#carouselExampleIndicators\" data-bs-slide=\"next\">\n    <span class=\"carousel-control-next-icon\" aria-hidden=\"true\"></span>\n    <span class=\"visually-hidden\">Next</span>\n  </button>\n</div>\n</div>\n\n   \n<script>\n    var cur_num=0;\n    var max_num=100;\n    function set_default(){\n        document.getElementById('welcome').style.visibility=\"hidden\";\n        document.getElementById('detection').style.visibility=\"hidden\";\n        document.getElementById(\"slide\").style.visibility=\"visible\";\n        document.getElementById(\"txt_fr\").style.fontSize = \"30px\";\n        document.getElementById(\"txt_ar\").style.fontSize = \"40px\";\n        document.getElementById('txt_fr').innerHTML = \"\";\n        document.getElementById('txt_ar').innerHTML = \"\";\n               \n    }\n</script>\n\n<script>\n    var opts = {\n        angle: 0.5, // The span of the gauge arc\n        lineWidth: 0.1, // The line thickness\n        radiusScale: 1, // Relative radius\n        pointer: {\n            length: 0.45, // // Relative to gauge radius\n            strokeWidth: 0, // The thickness\n            color: '#000000', // Fill color\n            staticLabels: true,\n        },\n    \n        limitMax: true,     // If false, max value increases automatically if value > maxValue\n        limitMin: true,     // If true, the min value of the gauge will be fixed\n        colorStart: '#6F6EA0',   // Colors\n        colorStop: '#C0C0DB',    // just experiment with them\n        strokeColor: '#EEEEEE',  // to see which ones work best for you\n        generateGradient: true,\n        highDpiSupport: true,     // High resolution support       \n        };\n\n    var target = document.getElementById('foo'); // your canvas element\n    var gauge = new Donut(target).setOptions(opts); // create gauge!\n    gauge.maxValue = max_num; // set max gauge value\n    gauge.setMinValue(0);  // Prefer setter over gauge.minValue = 0\n    gauge.animationSpeed = 32; // set animation speed (32 is default value)\n    gauge.set(cur_num); // set actual value\n    gauge.setTextField(document.getElementById(\"preview-textfield\").innerHTML=cur_num+\"/\"+max_num);\n</script>\n\n<script>\n    \n    const ws = new WebSocket(\"ws://localhost:8080\");\n\n\n    ws.addEventListener('open', function (event) {\n       console.log('Connected to WS Server');\n      \n    });\n\n    ws.onmessage = function (e) {\n      var server_message = JSON.parse(e.data, function (key, value) {\n        //console.log(e.data);\n        if (key.includes(\"cur_val\")) {\n            cur_num = parseInt(value);\n            gauge.set(cur_num);\n            gauge.setTextField(document.getElementById(\"preview-textfield\").innerHTML=parseInt(value)+\"/\"+max_num);\n\n\n        } else if (key.includes(\"max_val\")) {\n            max_num = parseInt(value);\n            gauge.maxValue = max_num;\n            gauge.setTextField(document.getElementById(\"preview-textfield\").innerHTML=cur_num+\"/\"+parseInt(value));\n            \n\n        } else if (key.includes(\"start\")) {  \n            document.getElementById('txt_fr').innerHTML = \"Bienvenue\";\n            document.getElementById('txt_ar').innerHTML = \"أهلا بك\";\n            document.getElementById(\"ulls\").style.visibility=\"visible\";\n            document.getElementById(\"slide\").style.visibility=\"hidden\";\n            const delay = setTimeout(set_video, 3000);\n            function set_video(){\n                document.getElementById(\"ulls\").style.visibility=\"hidden\";\n                document.getElementById(\"detection\").src=\"qr_code.png\";\n                document.getElementById(\"detection\").style.right=\"15%\";\n                document.getElementById(\"detection\").style.visibility=\"visible\";\n                document.getElementById(\"txt_fr\").style.fontSize = \"28px\";\n                document.getElementById(\"txt_fr\").style.fontSize = \"28px\";\n                document.getElementById('txt_fr').innerHTML = \"Merci de montrer votre pass sanitaire\";\n                document.getElementById('txt_ar').innerHTML = \"يرجى إظهار جواز التلقيح\";\n                document.getElementById(\"stream\").style.visibility = \"visible\";\n            }   \n\n\n        }\n        else if(key.includes(\"connected\")){\n            document.getElementById(\"stream\").src=\"http://127.0.0.1:4440/\";\n        }\n        \n        else if (key.includes(\"qr_done\")) {\n            \n            document.getElementById('txt_fr').innerHTML = \"Pass sanitaire validé\";\n            document.getElementById('txt_ar').innerHTML = \"تم التحقق من صحة جواز التلقيح\";\n            document.getElementById(\"detection\").style.visibility=\"hidden\";\n        }\n        else if (key.includes(\"mask_image\")) {\n            const timeout = setTimeout(stop, 3000);\n            function stop() {\n                    document.getElementById(\"detection\").src=\"mask.png\";\n                    document.getElementById(\"detection\").style.right=\"20%\";\n                    document.getElementById(\"detection\").style.visibility=\"visible\";\n                    document.getElementById('txt_fr').innerHTML = \"Merci de mettre votre masque\";\n                    document.getElementById('txt_ar').innerHTML = \"يرجى ارتداء الكمامة\";\n                }\n                      \n\n        }\n        else if (key.includes(\"done\")) {\n            document.getElementById('txt_fr').innerHTML = \"Entrer\";\n            document.getElementById('txt_ar').innerHTML = \"تفضل بالدخول\";\n            document.getElementById('detection').style.visibility=\"hidden\";\n            setTimeout(stop2, 2000);\n            function stop2() {\n                document.getElementById(\"stream\").style.visibility=\"hidden\";\n                document.getElementById(\"welcome\").style.visibility = \"visible\";\n               \n               \n                }\n            \n            const myTimeout = setTimeout(myGreeting, 4000);\n            function myGreeting() {\n                gauge.setTextField(document.getElementById(\"preview-textfield\").innerHTML=cur_num+\"/\"+max_num);\n                gauge.set(cur_num);\n                document.getElementById(\"welcome\").style.visibility = \"hidden\";\n                set_default();\n                }\n                \n        }\n      });\n    }\n\n    ws.onclose = function () {\n      // in case of lost connection tries to reconnect every 3 secs\n      setTimeout(wsConnect, 3000);\n    }\n  </script>\n\n</body>\n</html>",
+        "output": "str",
+        "x": 500,
+        "y": 520,
+        "wires": [
+            [
+                "f2ca546bc43eae30"
+            ]
+        ]
+    },
+    {
+        "id": "f2ca546bc43eae30",
+        "type": "http response",
+        "z": "ec68f3d61e3e2fed",
+        "name": "",
+        "statusCode": "",
+        "headers": {
+            "content-type": "text/html"
+        },
+        "x": 640,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "dc4eb567884746da",
+        "type": "function",
+        "z": "ec68f3d61e3e2fed",
+        "name": "",
+        "func": "if(msg.payload.includes(\"person\")){\n    msg.payload=true;\n    return msg;\n}\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 760,
+        "y": 160,
+        "wires": [
+            [
+                "12c8606da7c76ba9",
+                "b351735ef69d4a6c"
+            ]
+        ]
+    },
+    {
+        "id": "2968d5a33f8777cb",
+        "type": "websocket in",
+        "z": "ec68f3d61e3e2fed",
+        "name": "",
+        "server": "527b4367a9ac0375",
+        "client": "",
+        "x": 150,
+        "y": 360,
+        "wires": [
+            [
+                "d510409b99a7d0e0"
+            ]
+        ]
+    },
+    {
+        "id": "d510409b99a7d0e0",
+        "type": "function",
+        "z": "ec68f3d61e3e2fed",
+        "name": "",
+        "func": "if (msg.payload =='{\"done\": \"done\"}'){\n    return msg;\n}\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 360,
+        "y": 360,
+        "wires": [
+            [
+                "3633e3fed4528894",
+                "7b9fe854747ccb8d",
+                "19d04b911fd0e8b9"
+            ]
+        ]
+    },
+    {
+        "id": "1087d0b7a7420505",
+        "type": "Firestore in",
+        "z": "ec68f3d61e3e2fed",
+        "name": "",
+        "collection": "RT_data",
+        "group": false,
+        "document": "max",
+        "realtime": false,
+        "query": [],
+        "admin": "9fd7e3120c7380e0",
+        "snapHandler": "",
+        "eject": false,
+        "x": 1100,
+        "y": 500,
+        "wires": [
+            [
+                "f645dbbcc03dbfe0"
+            ]
+        ]
+    },
+    {
+        "id": "4ccfacafb6ccd320",
+        "type": "inject",
+        "z": "ec68f3d61e3e2fed",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "40",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "2",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 930,
+        "y": 500,
+        "wires": [
+            [
+                "1087d0b7a7420505"
+            ]
+        ]
+    },
+    {
+        "id": "409c3ca47b9b74bb",
+        "type": "Firestore out",
+        "z": "ec68f3d61e3e2fed",
+        "name": "",
+        "collection": "RT_data",
+        "document": "cur",
+        "operation": "set",
+        "admin": "9fd7e3120c7380e0",
+        "eject": false,
+        "x": 710,
+        "y": 460,
+        "wires": [
+            [
+                "fd4bccf8e2019be8"
+            ]
+        ]
+    },
+    {
+        "id": "ecbb7b3341044f79",
+        "type": "Firestore out",
+        "z": "ec68f3d61e3e2fed",
+        "name": "",
+        "collection": "Entree",
+        "document": "",
+        "operation": "add",
+        "admin": "9fd7e3120c7380e0",
+        "eject": false,
+        "x": 710,
+        "y": 420,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "3633e3fed4528894",
+        "type": "function",
+        "z": "ec68f3d61e3e2fed",
+        "name": "",
+        "func": "msg.payload={\"date\":new Date()};\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 520,
+        "y": 420,
+        "wires": [
+            [
+                "ecbb7b3341044f79"
+            ]
+        ]
+    },
+    {
+        "id": "f64b059640a8b616",
+        "type": "exec",
+        "z": "ec68f3d61e3e2fed",
+        "command": "python3 /home/pi/raspberry-pi/vision/person_detection/entrance_person_detection.py",
+        "addpay": "",
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "winHide": false,
+        "oldrc": false,
+        "name": "person detection",
+        "x": 550,
+        "y": 200,
+        "wires": [
+            [
+                "dc4eb567884746da"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "86dd74e6bb1d862d",
+        "type": "inject",
+        "z": "ec68f3d61e3e2fed",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "30",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "1",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 950,
+        "y": 560,
+        "wires": [
+            [
+                "fd4bccf8e2019be8"
+            ]
+        ]
+    },
+    {
+        "id": "fd4bccf8e2019be8",
+        "type": "Firestore in",
+        "z": "ec68f3d61e3e2fed",
+        "name": "",
+        "collection": "RT_data",
+        "group": false,
+        "document": "cur",
+        "realtime": false,
+        "query": [],
+        "admin": "9fd7e3120c7380e0",
+        "snapHandler": "",
+        "eject": false,
+        "x": 1120,
+        "y": 560,
+        "wires": [
+            [
+                "f645dbbcc03dbfe0"
+            ]
+        ]
+    },
+    {
+        "id": "cbdc3385c47fc2b1",
+        "type": "function",
+        "z": "ec68f3d61e3e2fed",
+        "name": "",
+        "func": "msg.payload={\"cur_val\": (parseInt(msg.payload.cur_val)+1)};\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 520,
+        "y": 460,
+        "wires": [
+            [
+                "409c3ca47b9b74bb"
+            ]
+        ]
+    },
+    {
+        "id": "7b9fe854747ccb8d",
+        "type": "Firestore in",
+        "z": "ec68f3d61e3e2fed",
+        "name": "",
+        "collection": "RT_data",
+        "group": false,
+        "document": "cur",
+        "realtime": false,
+        "query": [],
+        "admin": "9fd7e3120c7380e0",
+        "snapHandler": "",
+        "eject": false,
+        "x": 360,
+        "y": 460,
+        "wires": [
+            [
+                "cbdc3385c47fc2b1"
+            ]
+        ]
+    },
+    {
+        "id": "6d15373fe692d060",
+        "type": "inject",
+        "z": "ec68f3d61e3e2fed",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "0.1",
+        "topic": "",
+        "payload": "start",
+        "payloadType": "str",
+        "x": 770,
+        "y": 240,
+        "wires": [
+            [
+                "b351735ef69d4a6c",
+                "12c8606da7c76ba9"
+            ]
+        ]
+    },
+    {
+        "id": "21fdd285470a7db1",
+        "type": "exec",
+        "z": "ec68f3d61e3e2fed",
+        "command": "python3 /home/pi/raspberry-pi/sensors/ultrasonic_exit_sensor.py",
+        "addpay": "",
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "winHide": false,
+        "oldrc": false,
+        "name": "exxit ultrasonic sensor",
+        "x": 340,
+        "y": 60,
+        "wires": [
+            [
+                "b68170c610ce0ee5"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "b68170c610ce0ee5",
+        "type": "Firestore in",
+        "z": "ec68f3d61e3e2fed",
+        "name": "",
+        "collection": "RT_data",
+        "group": false,
+        "document": "cur",
+        "realtime": false,
+        "query": [],
+        "admin": "9fd7e3120c7380e0",
+        "snapHandler": "",
+        "eject": false,
+        "x": 540,
+        "y": 60,
+        "wires": [
+            [
+                "576076be282302dc"
+            ]
+        ]
+    },
+    {
+        "id": "576076be282302dc",
+        "type": "function",
+        "z": "ec68f3d61e3e2fed",
+        "name": "",
+        "func": "msg.payload={\"cur_val\": (parseInt(msg.payload.cur_val))-1};\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 700,
+        "y": 60,
+        "wires": [
+            [
+                "ad448b8598740923"
+            ]
+        ]
+    },
+    {
+        "id": "ad448b8598740923",
+        "type": "Firestore out",
+        "z": "ec68f3d61e3e2fed",
+        "name": "",
+        "collection": "RT_data",
+        "document": "cur",
+        "operation": "set",
+        "admin": "9fd7e3120c7380e0",
+        "eject": false,
+        "x": 890,
+        "y": 60,
+        "wires": [
+            [
+                "21fdd285470a7db1"
+            ]
+        ]
+    },
+    {
+        "id": "845868db.e47b18",
+        "type": "websocket-client",
+        "path": "ws://127.0.0.1:8080",
+        "tls": "",
+        "wholemsg": "false"
+    },
+    {
+        "id": "527b4367a9ac0375",
+        "type": "websocket-listener",
+        "path": "ws://127.0.0.1:8080",
+        "wholemsg": "false"
+    },
+    {
+        "id": "9fd7e3120c7380e0",
+        "type": "firebase admin",
+        "name": "firestore"
+    }
+]
