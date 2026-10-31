@@ -94,11 +94,11 @@ These designs represent the initial hardware concept and the intended layout of 
 
 ### Entrance Gate
 
-![3D Entrance Gate Design]([images/entrance-gate.png](<img width="584" height="276" alt="Image" src="https://github.com/user-attachments/assets/b0070cf9-7b94-4a04-8687-aa527b1cb01b" />))
+![3D Entrance Gate Design](docs/images/entree.png)
 
 ### Exit Gate
 
-![3D Exit Gate Design]([images/exit-gate.png](https://github.com/user-attachments/assets/4aabdd8e-a7cd-484d-8a26-a413dccefb75))
+![3D Exit Gate Design](docs/images/exit.png)
 
 
 ## Access Control Workflow
